@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const authRouter = require('./routes/auth');
 var { connectDb, connectDbSeq } = require('./models/db');
 
 var app = express();
@@ -31,11 +32,12 @@ app.use(async function(req, res, next) {
     console.error('Unable to connect to the database:', error);
   }
   console.log('db middleware connection successful');
-  res.send('OKEAASFA');
+  next();
 })
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
