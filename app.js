@@ -15,14 +15,12 @@ const models = require('./models/models');
 ;(async () => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync();
+    await sequelize.sync({ alter: true });
     console.log('DB connection has been established successfully.');
   } catch (err) {
     console.log('Unable to connect to the database:', err);
   };
 })();
-
-
 
 app.use(cors());
 app.use(logger('dev'));

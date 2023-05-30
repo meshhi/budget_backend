@@ -5,30 +5,76 @@ const { userModel } = require("../models/models")
 
 class AuthController {
   async registration(req, res, next) {
-    const {email, password, role} = req.body;
-    if (!email || !password) {
-      next(!email ? ApiError.internalError("No email") : !password ? ApiError.internalError("No password") : ApiError.internalError("No email and password"));
+    try {
+      const {email, password, role} = req.body;
+      if (!email || !password) {
+        throw ApiError.internalError("No email or password");
+      }
+      let candidate = await userModel.findOne({where: {email: email}})
+      const hashPassword = await bcrypt.hash(password, 5);
+      if (!candidate) {
+        candidate = await userModel.create({email: email, password: hashPassword, role: role});
+      } else {
+        throw ApiError.internalError("Email already exists");
+      }
+      const token = jsonwebtoken.sign({
+        id: candidate.id,
+        email,
+        password: hashPassword,
+        role
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "24h" });
+      
+      const responseData = {
+        response: "User created successfully!",
+        token,
+        user: candidate
+      };
+  
+      res.send(JSON.stringify(responseData));
+    } catch (err) {
+      next(err);
     }
+  }
 
-    const candidate = await userModel.findOne({where: {email: email}})
-    if (!candidate) {
-      await userModel.create({email: email, password: password, role: role});
-    } else {
-      next(ApiError.internalError("This email is already registered"));
+  async login(req, res, next) {
+    try {
+      const {email, password} = req.body;
+      if (!email || !password) {
+        throw ApiError.internalError("No email or password");
+      }
+      let candidate = await userModel.findOne({where: {email: email}});
+      if (!candidate) {
+        throw ApiError.internalError("User not found!");
+      }
+
+      const isValidPassword = await bcrypt.compareSync(password, candidate.password);
+      if (isValidPassword) {
+        const hashPassword = await bcrypt.hash(password, 5);
+        const token = jsonwebtoken.sign({
+          id: candidate.id,
+          email: candidate.email,
+          password: hashPassword,
+          role: candidate.role
+        },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: "24h" });
+  
+        const responseData = {
+          response: "Login success!",
+          token,
+          user: candidate
+        };
+    
+        res.send(JSON.stringify(responseData));
+      } else {
+        throw ApiError.internalError("Invalid password!");
+      }
+    } catch (err) {
+      next(err);
     }
-
-    const hashPassword = await bcrypt.hash(password, 5);
-    const token = jsonwebtoken.sign({
-      id: Math.floor(Math.random() * 1000),
-      email,
-      password: hashPassword,
-      role
-    },
-    process.env.JWT_SECRET_KEY,
-    { expiresIn: "24h" });
-
-    res.send(JSON.stringify(token));
-  }  
+  };
 }
 
 module.exports = new AuthController();
