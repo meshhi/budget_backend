@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var { connectDb } = require('./models/db');
 
 var app = express();
 
@@ -18,6 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(async function(req, res, next) {
+  console.log('db middleware');
+  await connectDb();
+  console.log('db middleware connection successful');
+})
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
