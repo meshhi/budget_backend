@@ -2,7 +2,7 @@ import { Sequelize, DataTypes } from 'sequelize';
 const { sequelize } = require('')
 
 const User = sequelize.define('User', {
-  id:
+  id: { type: DataTypes.INTEGER, },
   username: DataTypes.STRING,
-  birthday: DataTypes.DATE,
+  login: DataTypes.STRING,
 });
