@@ -7,19 +7,21 @@ class AuthController {
   async registration(req, res, next) {
     const {email, password, role} = req.body;
     if (!email || !password) {
-      next(ApiError.internalError("no email or password"));
+      next(!email ? ApiError.internalError("No email") : !password ? ApiError.internalError("No password") : ApiError.internalError("No email and password"));
     }
 
     const candidate = await userModel.findOne({where: {email: email}})
     if (!candidate) {
-      // await userModel.create({email: email, password: password, role: role});
-      next(ApiError.internalError("No user with that email"));
+      await userModel.create({email: email, password: password, role: role});
+    } else {
+      next(ApiError.internalError("This email is already registered"));
     }
 
     const hashPassword = await bcrypt.hash(password, 5);
     const token = jsonwebtoken.sign({
       id: Math.floor(Math.random() * 1000),
       email,
+      password: hashPassword,
       role
     },
     process.env.JWT_SECRET_KEY,
