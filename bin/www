@@ -15,7 +15,6 @@ require("dotenv").config()
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-console.log('Port: ' + port);
 /**
  * Create HTTP server.
  */
@@ -83,6 +82,8 @@ function onError(error) {
  */
 
 function onListening() {
+  console.log('HTTP server listening ' + port);
+  console.log('server.address() ' + server.address());
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr
