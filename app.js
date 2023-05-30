@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var { connectDb } = require('./models/db');
+var { connectDb, connectDbSeq } = require('./models/db');
 
 var app = express();
 
@@ -22,7 +22,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(async function(req, res, next) {
   console.log('db middleware');
-  await connectDb();
+  // await connectDb();
+  const sequelize = await connectDbSeq();
+  try {
+    await sequelize.authenticate();
+    console.log('Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the database:', error);
+  }
   console.log('db middleware connection successful');
 })
 

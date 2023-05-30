@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 
+require("dotenv").config()
 var app = require('../app');
 var debug = require('debug')('welbex-2:server');
 var http = require('http');
-require("dotenv").config()
 
 /**
  * Get port from environment and store in Express.
@@ -83,7 +83,6 @@ function onError(error) {
 
 function onListening() {
   console.log('HTTP server listening ' + port);
-  console.log('server.address() ' + server.address());
   var addr = server.address();
   var bind = typeof addr === 'string'
     ? 'pipe ' + addr

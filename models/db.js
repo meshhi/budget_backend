@@ -1,4 +1,5 @@
 const { Client } = require("pg")
+const { Sequelize } = require("sequelize")
 
 const connectDb = async () => {
   try {
@@ -15,10 +16,20 @@ const connectDb = async () => {
       console.log(res)
       await client.end()
   } catch (error) {
-      console.log(error)
+      console.log(error)  
   }
 }
 
+const connectDbSeq = async () => {
+  try {
+      const sequelize = new Sequelize(`postgres://${process.env.PGUSER}:${process.env.PGPASSWORD}@${process.env.PGHOST}:${process.env.PGPORT}/${process.env.PGDATABASE}`);
+      return sequelize;
+  } catch (error) {
+      console.log(error)  
+  }
+} 
+
 module.exports = {
-  connectDb
+  connectDb,
+  connectDbSeq
 }
