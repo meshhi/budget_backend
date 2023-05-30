@@ -31,6 +31,7 @@ app.use(async function(req, res, next) {
     console.error('Unable to connect to the database:', error);
   }
   console.log('db middleware connection successful');
+  res.send('OKEAASFA');
 })
 
 app.use('/', indexRouter);
