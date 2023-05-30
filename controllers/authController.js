@@ -1,7 +1,7 @@
 const jsonwebtoken = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ApiError = require("../utils/ApiError");
-// const userModel = require("../models/userModel")
+const { userModel } = require("../models/models")
 
 class AuthController {
   async registration(req, res, next) {
@@ -10,10 +10,12 @@ class AuthController {
       next(ApiError.customError("no email or password"));
     }
 
-    // const candidate = await userModel.findOne({where: {email: email}})
-    // if (!candidate) {
-    //   next()
-    // }
+    const candidate = await userModel.findOne({where: {email: email}})
+    if (!candidate) {
+      console.log("No user with that email");
+      await userModel.create({email: email, password: password, role: role});
+      next();
+    }
 
     // const hashPassword = await bcrypt.hash(password, 5);
     // const token = jsonwebtoken.sign({
@@ -28,7 +30,9 @@ class AuthController {
     // )
 
     // res.send(JSON.stringify(token));
-    res.send('fas')
+    // res.send('fas')
+    
+    res.status(200);
   }  
 }
 
