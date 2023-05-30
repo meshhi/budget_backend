@@ -7,32 +7,25 @@ class AuthController {
   async registration(req, res, next) {
     const {email, password, role} = req.body;
     if (!email || !password) {
-      next(ApiError.customError("no email or password"));
+      next(ApiError.internalError("no email or password"));
     }
 
     const candidate = await userModel.findOne({where: {email: email}})
     if (!candidate) {
-      console.log("No user with that email");
-      await userModel.create({email: email, password: password, role: role});
-      next();
+      // await userModel.create({email: email, password: password, role: role});
+      next(ApiError.internalError("No user with that email"));
     }
 
-    // const hashPassword = await bcrypt.hash(password, 5);
-    // const token = jsonwebtoken.sign({
-    //   id: Math.floor(Math.random() * 1000),
-    //   email,
-    //   role
-    // },
-    // process.env.JWT_SECRET_KEY,
-    // {
-    //   expiresIn: "24h"
-    // }
-    // )
+    const hashPassword = await bcrypt.hash(password, 5);
+    const token = jsonwebtoken.sign({
+      id: Math.floor(Math.random() * 1000),
+      email,
+      role
+    },
+    process.env.JWT_SECRET_KEY,
+    { expiresIn: "24h" });
 
-    // res.send(JSON.stringify(token));
-    // res.send('fas')
-    
-    res.status(200);
+    res.send(JSON.stringify(token));
   }  
 }
 

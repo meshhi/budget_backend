@@ -31,6 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', rootRouter);
 
-app.use(errorMiddleware.handleError);
+app.use(errorMiddleware);
 
 module.exports = app;
