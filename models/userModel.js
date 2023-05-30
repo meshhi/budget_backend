@@ -1,8 +1,11 @@
-import { Sequelize, DataTypes } from 'sequelize';
-const { sequelize } = require('')
+const { Sequelize, DataTypes } = require('sequelize');
+// const { sequelize } = require('')
 
-const User = sequelize.define('User', {
+const userModel = sequelize.define('User', {
   id: { type: DataTypes.INTEGER, },
-  username: DataTypes.STRING,
-  login: DataTypes.STRING,
+  email: DataTypes.STRING,
+  password: DataTypes.STRING,
+  role: DataTypes.STRING,
 });
+
+module.exports = userModel;
