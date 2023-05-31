@@ -34,7 +34,7 @@ class AuthController {
   
       res.send(JSON.stringify(responseData));
     } catch (err) {
-      next(err);
+      return next(err);
     }
   }
 
@@ -72,7 +72,7 @@ class AuthController {
         throw ApiError.internalError("Invalid password!");
       }
     } catch (err) {
-      next(err);
+      return next(err);
     }
   };
 }

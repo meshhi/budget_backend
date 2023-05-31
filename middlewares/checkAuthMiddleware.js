@@ -11,13 +11,14 @@ module.exports = async (req, res, next) => {
       const tokenData = jsonwebtoken.decode(token);
       const user = await userModel.findOne({where: { id: tokenData?.id }});
       if (user && user.email === tokenData.email) {
-        res.send('Authentication successful');
+        req.user = user;
+        return next();
       } else {
         throw new ApiError(403, 'No user with that credentials');
       }
     }
   } catch (err) {
-    process.env.DEBUG === "debug"
+    return process.env.DEBUG === "debug"
       ? next(err)
       : next(new ApiError(500, 'Internal authorization error'));
   }

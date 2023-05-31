@@ -9,7 +9,7 @@ const freeRouter = require('./free/freeRouter');
  *     description: Auth routes
  *   - name: '/user'
  *     description: User routes
- *   - name: '/post'
+ *   - name: '/blog-post'
  *     description: Post routes
  */
 router.use(freeRouter);

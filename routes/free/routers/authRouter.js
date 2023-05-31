@@ -54,8 +54,8 @@ const authController = require("../../../controllers/authController");
  *             schema:
  *               type: object
  */
-
 router.post("/registration", authController.registration);
+
 /* POST auth login. */
 /**
  * @openapi

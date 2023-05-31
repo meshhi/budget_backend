@@ -6,6 +6,6 @@ const checkAuthMiddleware = require('../../middlewares/checkAuthMiddleware');
 
 router.use(checkAuthMiddleware);
 router.use('/user', userRouter);
-router.use('/post', postRouter);
+router.use('/blog-post', postRouter);
 
 module.exports = router;

@@ -7,18 +7,41 @@ class PostController {
   async createPost(req, res, next) {
     try {
       const { title, text } = req.body;
+      const authUser = req.user;
       if (!title || !text) {
-        throw ApiError.internalError("Invalid password!");
+        throw ApiError.internalError("No data for blog post creation!");
       } else {
-        const post = postModel.findOrCreate({where: {title: title, text: text}})
+        let post = await postModel.findOne({where: {title: title, text: text}})
+        if (post) {
+          return next(new ApiError(400, 'Post already exists'));
+        } else {
+          post = await postModel.create({title: title, text: text, UserId: authUser.id});
+        }
         const responseData = {
-          response: "Get your post!",
+          response: "Blog post created!",
           post: post
         }
         res.send(JSON.stringify(responseData));
       }
     } catch (err) {
-      next(err);
+      return next(err);
+    }
+  };
+
+  async editPost(req, res, next) {
+    try {
+      const { title, text } = req.body;
+      const postId = req.params.id;
+      const authUser = req.user;
+      const post = await postModel.findOne({where: {id: postId}, include: { model: userModel, where: {id: authUser.id}}});
+      if (!post) {
+        throw ApiError.internalError("You cant edit this blog post!");
+      } else {
+        await post.update({title: title, text: text});
+        res.send('post edited');
+      }
+    } catch (err) {
+      return next(err);
     }
   };
 }
