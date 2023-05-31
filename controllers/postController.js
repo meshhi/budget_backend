@@ -4,6 +4,27 @@ const ApiError = require("../utils/ApiError");
 const { userModel, postModel } = require("../models/models")
 
 class PostController {
+  async getPosts(req, res, next) {
+    try {
+      const authUser = req.user;
+      let { page, count } = req.query;
+      page = page ? page : 1;
+      count = count ? count : 10;
+      console.log(page, count);
+      const offset = page * count - count;
+      const posts = await postModel.findAll({offset: offset, limit: count})
+
+      const responseData = {
+        response: "Posts!",
+        posts
+      }
+      res.send(JSON.stringify(responseData));
+      
+    } catch (err) {
+      return next(err);
+    }
+  };
+
   async createPost(req, res, next) {
     try {
       const { title, text } = req.body;
@@ -21,6 +42,7 @@ class PostController {
           response: "Blog post created!",
           post: post
         }
+        res.statusCode = 201;
         res.send(JSON.stringify(responseData));
       }
     } catch (err) {
@@ -38,7 +60,29 @@ class PostController {
         throw ApiError.internalError("You cant edit this blog post!");
       } else {
         await post.update({title: title, text: text});
-        res.send('post edited');
+        const response = {
+          response: `Post ${postId} updated!`
+        }
+        res.send(JSON.stringify(response));
+      }
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  async deletePost(req, res, next) {
+    try {
+      const postId = req.params.id;
+      const authUser = req.user;
+      const post = await postModel.findOne({where: {id: postId}, include: { model: userModel, where: {id: authUser.id}}});
+      if (!post) {
+        throw new ApiError(404, "Blog post not found!");
+      } else {
+        await post.destroy();
+        const response = {
+          response: `Post ${postId} deleted`
+        }
+        res.send(JSON.stringify(response));
       }
     } catch (err) {
       return next(err);

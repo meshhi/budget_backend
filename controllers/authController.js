@@ -31,7 +31,7 @@ class AuthController {
         token,
         user: candidate
       };
-  
+      res.statusCode = 201;
       res.send(JSON.stringify(responseData));
     } catch (err) {
       return next(err);
