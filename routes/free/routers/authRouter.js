@@ -20,8 +20,10 @@ const authController = require("../../../controllers/authController");
  *             properties:
  *               email:
  *                 type: string
+ *                 example: test@example.com
  *               password:
  *                 type: string
+ *                 example: yhu345fg34tyu
  *    responses:
  *       201:
  *         description: New user has been registered
@@ -64,8 +66,10 @@ router.post("/registration", authController.registration);
  *             properties:
  *               email:
  *                 type: string
+*                  example: some@somedomain.com
  *               password:
  *                 type: string
+ *                 example: 23h4g23h4g2i3gy
  *    responses:
  *       200:
  *         description: Successfull login

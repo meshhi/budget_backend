@@ -24,7 +24,6 @@ class PostController {
         post
       }
       res.send(JSON.stringify(responseData));
-      
     } catch (err) {
       return next(err);
     }
@@ -116,7 +115,7 @@ class PostController {
       const authUser = req.user;
       const post = await postModel.findOne({where: {id: postId}, include: { model: userModel, where: {id: authUser.id}}});
       if (!post) {
-        throw ApiError.internalError("You can`t edit this blog post!");
+        throw new ApiError(403, "You can`t edit this blog post!");
       } else {
         await post.update({title: title, text: text, media: file?.path ? file.path : post.media});
         const response = {
