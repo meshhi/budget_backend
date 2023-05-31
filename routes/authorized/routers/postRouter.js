@@ -14,7 +14,7 @@ const upload = multer({ dest: 'uploads/' })
  *    tags: [/blog-post]
  *    parameters:
  *      - in: path
- *        name: post_id
+ *        name: id
  *        schema:
  *           type: integer
  *        description: Blog post identifier.
@@ -38,7 +38,7 @@ router.get('/get/:id', postController.getPost);
  *    tags: [/blog-post]
  *    parameters:
  *      - in: path
- *        name: post_id
+ *        name: id
  *        schema:
  *           type: integer
  *        description: Blog post identifier.
@@ -113,6 +113,12 @@ router.post('/create', upload.single('media'), postController.createPost);
  * /api/blog-post/edit/{id}:
  *   patch:
  *    description: Edit blog post
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *           type: integer
+ *        description: Blog post id.
  *    security:
  *      - BearerAuth: []
  *    tags: [/blog-post]
@@ -143,6 +149,12 @@ router.patch('/edit/:id', upload.single('media'), postController.editPost);
  * /api/blog-post/delete/{id}:
  *   delete:
  *    description: Delete blog post
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        schema:
+ *           type: integer
+ *        description: Blog post id.
  *    security:
  *      - BearerAuth: []
  *    tags: [/blog-post]
