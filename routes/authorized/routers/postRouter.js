@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const postController = require('../../../controllers/postController');
-
+const multer  = require('multer')
+const upload = multer({ dest: 'uploads/' })
 
 /**
  * @openapi
@@ -57,7 +58,7 @@ router.get('/get', postController.getPosts);
  *             schema:
  *               type: object
  */
-router.post('/create', postController.createPost);
+router.post('/create', upload.single('media'), postController.createPost);
 
 /**
  * @openapi

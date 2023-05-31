@@ -20,14 +20,12 @@ const options = {
   },
   apis: ['./routes/*.js', './routes/authorized/routers/*.js', './routes/free/routers/*.js'], // files containing annotations as above
 };
-
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = swaggerJSDoc(options);
 
 // init db
 const sequelize = require('./models/db');
-const models = require('./models/models');
 ;(async () => {
   try {
     await sequelize.authenticate();
@@ -43,7 +41,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'upload')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', rootRouter);
 app.use(errorMiddleware);
