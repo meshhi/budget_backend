@@ -7,8 +7,6 @@ const freeRouter = require('./free/freeRouter');
  * tags:
  *   - name: '/auth'
  *     description: Auth routes
- *   - name: '/user'
- *     description: User routes
  *   - name: '/blog-post'
  *     description: Post routes
  */
@@ -39,6 +37,7 @@ const freeRouter = require('./free/freeRouter');
  *     BearerAuth:
  *        type: http
  *        scheme: bearer
+ *        bearerFormat: JWT
  */
 router.use(freeRouter);
 router.use(authorizedRouter);

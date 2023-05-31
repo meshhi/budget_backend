@@ -6,9 +6,55 @@ const upload = multer({ dest: 'uploads/' })
 
 /**
  * @openapi
- * /api/blog-post/get/:
+ * /api/blog-post/get/{id}:
+ *   get:
+ *    description: Get blog by identifier.
+ *    security:
+ *      - BearerAuth: []
+ *    tags: [/blog-post]
+ *    parameters:
+ *      - in: path
+ *        name: post_id
+ *        schema:
+ *           type: integer
+ *        description: Blog post identifier.
+ *    responses:
+ *       200:
+ *         description: Returns post
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ */
+router.get('/get/:id', postController.getPost);
+
+/**
+ * @openapi
+ * /api/blog-post/get/{id}/media:
+ *   get:
+ *    description: Get blog post media by identifier.
+ *    security:
+ *      - BearerAuth: []
+ *    tags: [/blog-post]
+ *    parameters:
+ *      - in: path
+ *        name: post_id
+ *        schema:
+ *           type: integer
+ *        description: Blog post identifier.
+ *    responses:
+ *       200:
+ *         description: Returns post`s media
+ */
+router.get('/get/:id/media', postController.getPostMedia);
+
+/**
+ * @openapi
+ * /api/blog-post/get:
  *   get:
  *    description: Get blog posts
+ *    security:
+ *      - BearerAuth: []
  *    tags: [/blog-post]
  *    parameters:
  *      - in: query
@@ -36,6 +82,8 @@ router.get('/get', postController.getPosts);
  * /api/blog-post/create:
  *   post:
  *    description: Create new blog post
+ *    security:
+ *      - BearerAuth: []
  *    tags: [/blog-post]
  *    requestBody:
  *       content:
@@ -65,6 +113,8 @@ router.post('/create', upload.single('media'), postController.createPost);
  * /api/blog-post/edit/{id}:
  *   patch:
  *    description: Edit blog post
+ *    security:
+ *      - BearerAuth: []
  *    tags: [/blog-post]
  *    requestBody:
  *       content:
@@ -86,13 +136,15 @@ router.post('/create', upload.single('media'), postController.createPost);
  *             schema:
  *               type: object
  */
-router.patch('/edit/:id', postController.editPost);
+router.patch('/edit/:id', upload.single('media'), postController.editPost);
 
 /**
  * @openapi
  * /api/blog-post/delete/{id}:
  *   delete:
  *    description: Delete blog post
+ *    security:
+ *      - BearerAuth: []
  *    tags: [/blog-post]
  *    responses:
  *       200:

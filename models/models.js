@@ -12,6 +12,7 @@ const postModel = sequelize.define('Post', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, allowNull: false, unique: false },
   text:{ type: DataTypes.STRING, allowNull: false, unique: false },
+  media:{ type: DataTypes.STRING, allowNull: true, unique: false },
 });
 
 userModel.hasMany(postModel);
