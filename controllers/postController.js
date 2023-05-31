@@ -63,7 +63,7 @@ class PostController {
       count = count ? count : 20;
       console.log(page, count);
       const offset = page * count - count;
-      const posts = await postModel.findAll({
+      const posts = await postModel.findAndCountAll({
         include: {
           model: userModel,
         }, 

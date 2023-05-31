@@ -23,12 +23,26 @@ const authController = require("../../../controllers/authController");
  *               password:
  *                 type: string
  *    responses:
- *       200:
+ *       201:
  *         description: New user has been registered
  *         content:
  *           application/json:
  *             schema:
- *               type: User
+ *               type: object
+ *               properties:
+ *                 response:
+ *                   type: string
+ *                 token: 
+ *                   type: string
+ *                 user:
+ *                   $ref: "#/components/schemas/User"
+ *       500:
+ *         description: Invalidated registration
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: "#/components/schemas/ApiError"
  */
 router.post("/registration", authController.registration);
 
@@ -59,6 +73,20 @@ router.post("/registration", authController.registration);
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 response:
+ *                   type: string
+ *                 token: 
+ *                   type: string
+ *                 user:
+ *                   $ref: "#/components/schemas/User"
+ *       500:
+ *         description: Invalidated login
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               $ref: "#/components/schemas/ApiError"
  */
 router.post("/login", authController.login);
 
