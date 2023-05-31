@@ -8,7 +8,7 @@ module.exports = async (req, res, next) => {
     if (!token) {
       throw new ApiError(403, 'Unauthorized');
     } else {
-      const tokenData = jsonwebtoken.decode(token);
+      const tokenData = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
       const user = await userModel.findOne({where: { id: tokenData?.id }});
       if (user && user.email === tokenData.email) {
         req.user = user;
