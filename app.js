@@ -9,6 +9,22 @@ const errorMiddleware = require('./middlewares/errorMiddleware');
 const rootRouter = require('./routes/rootRouter');
 const app = express();
 
+// swagger
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Welbex API',
+      version: '1.0.0',
+    },
+  },
+  apis: ['./routes/*.js'], // files containing annotations as above
+};
+
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = swaggerJSDoc(options);
+
 // init db
 const sequelize = require('./models/db');
 const models = require('./models/models');
@@ -28,6 +44,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', rootRouter);
 app.use(errorMiddleware);
 
