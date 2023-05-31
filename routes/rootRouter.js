@@ -35,6 +35,10 @@ const freeRouter = require('./free/freeRouter');
  *         email: The New Turing Omnibus
  *         password: Alexander K. Dewdney
  *         role: admin
+ *   securitySchemes:
+ *     BearerAuth:
+ *        type: http
+ *        scheme: bearer
  */
 router.use(freeRouter);
 router.use(authorizedRouter);

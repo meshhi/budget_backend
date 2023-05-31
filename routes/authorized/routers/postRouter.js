@@ -5,18 +5,20 @@ const postController = require('../../../controllers/postController');
 
 /**
  * @openapi
- * api/blog-post/get:
+ * /api/blog-post/get/:
  *   get:
  *    description: Get blog posts
  *    tags: [/blog-post]
  *    parameters:
- *        - in: query
+ *      - in: query
  *        name: page
- *        type: integer
+ *        schema:
+ *           type: integer
  *        description: Page number.
- *        - in: query
+ *      - in: query
  *        name: count
- *        type: integer
+ *        schema:
+ *           type: integer
  *        description: Records count on page.
  *    responses:
  *       200:
@@ -59,7 +61,7 @@ router.post('/create', postController.createPost);
 
 /**
  * @openapi
- * /api/blog-post/edit:
+ * /api/blog-post/edit/{id}:
  *   patch:
  *    description: Edit blog post
  *    tags: [/blog-post]
@@ -87,7 +89,7 @@ router.patch('/edit/:id', postController.editPost);
 
 /**
  * @openapi
- * /api/blog-post/delete:
+ * /api/blog-post/delete/{id}:
  *   delete:
  *    description: Delete blog post
  *    tags: [/blog-post]
