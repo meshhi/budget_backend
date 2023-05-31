@@ -1,8 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const authRouter = require('./authRouter');
-const userRouter = require('./userRouter');
-const postRouter = require('./postRouter');
+const authorizedRouter = require('./authorized/authorizedRouter');
+const freeRouter = require('./free/freeRouter');
 /**
  * @openapi
  * tags:
@@ -13,8 +12,7 @@ const postRouter = require('./postRouter');
  *   - name: '/post'
  *     description: Post routes
  */
-router.use('/auth', authRouter);
-router.use('/user', userRouter);
-router.use('/post', postRouter);
+router.use(freeRouter);
+router.use(authorizedRouter);
 
 module.exports = router;

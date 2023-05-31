@@ -18,7 +18,7 @@ const options = {
       version: '1.0.0',
     },
   },
-  apis: ['./routes/*.js'], // files containing annotations as above
+  apis: ['./routes/*.js', './routes/authorized/routers/*.js', './routes/free/routers/*.js'], // files containing annotations as above
 };
 
 const swaggerJSDoc = require('swagger-jsdoc');
