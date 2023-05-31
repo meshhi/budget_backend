@@ -65,7 +65,7 @@ router.get('/get/:id/media', postController.getPostMedia);
 
 /**
  * @openapi
- * /api/blog-post/get:
+ * /api/blog-post/get-all:
  *   get:
  *    description: Get all blog posts with pagination
  *    security:
@@ -110,7 +110,7 @@ router.get('/get/:id/media', postController.getPostMedia);
  *               type: object
  *               $ref: "#/components/schemas/ApiError"
  */
-router.get('/get/all', postController.getPosts);
+router.get('/get-all', postController.getPosts);
 
 /**
  * @openapi
@@ -192,7 +192,7 @@ router.post('/create', upload.single('media'), postController.createPost);
  *                 example: Some title
  *               text:
  *                 type: string
- *                  example: Some text
+ *                 example: Some text
  *    responses:
  *       200:
  *         description: Post edited successfully

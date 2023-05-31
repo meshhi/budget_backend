@@ -66,7 +66,7 @@ router.post("/registration", authController.registration);
  *             properties:
  *               email:
  *                 type: string
-*                  example: some@somedomain.com
+ *                 example: some@somedomain.com
  *               password:
  *                 type: string
  *                 example: 23h4g23h4g2i3gy

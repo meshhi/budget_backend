@@ -2,7 +2,9 @@ const ApiError = require('../utils/ApiError');
 
 module.exports = (err, req, res, next) => {
   res.statusCode = err.code || 500;
-  res.send(JSON.stringify({
+  const responseData ={
     response: err.message || err
-  }));
+  };
+
+  res.json(responseData);
 };
