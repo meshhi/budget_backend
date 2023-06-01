@@ -11,9 +11,9 @@ class PostController {
         where: {id: postId},
         include: {
           model: userModel,
-          where: {
-            id: authUser.id
-          }
+          // where: {
+          //   id: authUser.id
+          // }
         }
       })
       if (!post) {
@@ -37,9 +37,9 @@ class PostController {
         where: {id: postId},
         include: {
           model: userModel,
-          where: {
-            id: authUser.id
-          }
+          // where: {
+          //   id: authUser.id
+          // }
         }
       })
       if (!post) {
