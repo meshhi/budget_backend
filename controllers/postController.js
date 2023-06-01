@@ -11,9 +11,6 @@ class PostController {
         where: {id: postId},
         include: {
           model: userModel,
-          // where: {
-          //   id: authUser.id
-          // }
         }
       })
       if (!post) {
@@ -37,9 +34,6 @@ class PostController {
         where: {id: postId},
         include: {
           model: userModel,
-          // where: {
-          //   id: authUser.id
-          // }
         }
       })
       if (!post) {
@@ -88,12 +82,7 @@ class PostController {
       if (!title || !text) {
         throw ApiError.internalError("No data for blog post creation!");
       } else {
-        let post = await postModel.findOne({where: {title: title, text: text}})
-        if (post) {
-          return next(new ApiError(400, 'Post already exists'));
-        } else {
-          post = await postModel.create({title: title, text: text, UserId: authUser.id, media: file?.path});
-        }
+        let post = await postModel.create({title: title, text: text, UserId: authUser.id, media: file?.path});
         const responseData = {
           response: "Blog post created!",
           post: post
@@ -114,7 +103,7 @@ class PostController {
       const authUser = req.user;
       const post = await postModel.findOne({where: {id: postId}, include: { model: userModel, where: {id: authUser.id}}});
       if (!post) {
-        throw new ApiError(403, "You can`t edit this blog post!");
+        throw new ApiError(404, "No post available for edit found!");
       } else {
         await post.update({title: title, text: text, media: file?.path ? file.path : post.media});
         const responseData = {

@@ -40,8 +40,11 @@ const generateTestData = async (req, res, next) => {
   for (let i = 0; i < 20; i++) {
     await postModel.create({title: new Date().toDateString(), text: new Date().toDateString(), UserId: Math.floor((Math.random()*20)+1)});
   }
-  res.send('Data generated!')
+  if (req) {
+    res.send('Data generated!')
+  }
 }
+generateTestData();
 
 app.use(cors());
 app.use(logger('dev'));
