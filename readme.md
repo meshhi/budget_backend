@@ -4,3 +4,5 @@ docker  run  --name  pg  -p  3003:5432  -e  POSTGRES_USER=postgres  -e  POSTGRES
 2. Запуск приложения<br />  
 npm i<br />  
 npm run start
+
+Swagger будет доступен по адресу http://localhost:5000/api-docs
