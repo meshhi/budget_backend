@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
   try {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-      throw new ApiError(403, 'Unauthorized');
+      throw new ApiError(401, 'Unauthorized');
     } else {
       const tokenData = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
       const user = await userModel.findOne({where: { id: tokenData?.id }});
@@ -14,7 +14,7 @@ module.exports = async (req, res, next) => {
         req.user = user;
         return next();
       } else {
-        throw new ApiError(403, 'No user with that credentials');
+        throw new ApiError(401, 'No user with that credentials');
       }
     }
   } catch (err) {

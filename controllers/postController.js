@@ -11,9 +11,6 @@ class PostController {
         where: {id: postId},
         include: {
           model: userModel,
-          where: {
-            id: authUser.id
-          }
         }
       })
       if (!post) {
@@ -23,8 +20,7 @@ class PostController {
         response: `Post ${postId}!`,
         post
       }
-      res.send(JSON.stringify(responseData));
-      
+      res.json(responseData);
     } catch (err) {
       return next(err);
     }
@@ -38,9 +34,6 @@ class PostController {
         where: {id: postId},
         include: {
           model: userModel,
-          where: {
-            id: authUser.id
-          }
         }
       })
       if (!post) {
@@ -63,7 +56,7 @@ class PostController {
       count = count ? count : 20;
       console.log(page, count);
       const offset = page * count - count;
-      const posts = await postModel.findAll({
+      const posts = await postModel.findAndCountAll({
         include: {
           model: userModel,
         }, 
@@ -75,8 +68,7 @@ class PostController {
         response: "Posts!",
         posts
       }
-      res.send(JSON.stringify(responseData));
-      
+      res.json(responseData);
     } catch (err) {
       return next(err);
     }
@@ -90,18 +82,13 @@ class PostController {
       if (!title || !text) {
         throw ApiError.internalError("No data for blog post creation!");
       } else {
-        let post = await postModel.findOne({where: {title: title, text: text}})
-        if (post) {
-          return next(new ApiError(400, 'Post already exists'));
-        } else {
-          post = await postModel.create({title: title, text: text, UserId: authUser.id, media: file.path});
-        }
+        let post = await postModel.create({title: title, text: text, UserId: authUser.id, media: file?.path});
         const responseData = {
           response: "Blog post created!",
           post: post
         }
         res.statusCode = 201;
-        res.send(JSON.stringify(responseData));
+        res.json(responseData);
       }
     } catch (err) {
       return next(err);
@@ -116,13 +103,13 @@ class PostController {
       const authUser = req.user;
       const post = await postModel.findOne({where: {id: postId}, include: { model: userModel, where: {id: authUser.id}}});
       if (!post) {
-        throw ApiError.internalError("You can`t edit this blog post!");
+        throw new ApiError(404, "No post available for edit found!");
       } else {
         await post.update({title: title, text: text, media: file?.path ? file.path : post.media});
-        const response = {
+        const responseData = {
           response: `Post ${postId} updated!`
         }
-        res.send(JSON.stringify(response));
+        res.json(responseData);
       }
     } catch (err) {
       return next(err);
@@ -138,10 +125,10 @@ class PostController {
         throw new ApiError(404, "Blog post not found!");
       } else {
         await post.destroy();
-        const response = {
+        const responseData = {
           response: `Post ${postId} deleted`
         }
-        res.send(JSON.stringify(response));
+        res.json(responseData);
       }
     } catch (err) {
       return next(err);

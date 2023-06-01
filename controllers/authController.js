@@ -32,7 +32,7 @@ class AuthController {
         user: candidate
       };
       res.statusCode = 201;
-      res.send(JSON.stringify(responseData));
+      res.json(responseData);
     } catch (err) {
       return next(err);
     }
@@ -67,7 +67,7 @@ class AuthController {
           user: candidate
         };
     
-        res.send(JSON.stringify(responseData));
+        res.json(responseData);
       } else {
         throw ApiError.internalError("Invalid password!");
       }
