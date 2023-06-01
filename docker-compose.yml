@@ -1,0 +1,19 @@
+services:
+  database:
+    image: "postgres:latest"
+    container_name: dc_welbex_db
+    expose:
+      - "5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: welbex_db
+    restart: always
+  api-service:
+    build: .
+    container_name: dc_welbex_api
+    ports:
+      - "8000:5000"
+    depends_on:
+      - database
+    restart: always
