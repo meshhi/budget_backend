@@ -19,6 +19,7 @@ const transactionModel = sequelize.define('Transaction', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, allowNull: false, unique: false },
   text:{ type: DataTypes.STRING, allowNull: false, unique: false },
+  summary:{ type: DataTypes.INTEGER, allowNull: false, unique: false },
   isIncome:{ type: DataTypes.BOOLEAN, allowNull: true, unique: false },
 });
 
