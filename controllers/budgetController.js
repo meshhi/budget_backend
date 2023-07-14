@@ -29,6 +29,24 @@ class BudgetController {
       return next(err);
     }
   };
+
+  async deleteTransaction(req, res, next) {
+    try {
+      const { id } = req.body;
+      const transaction = await transactionModel.findOne({where: {id: id}});
+      if (!transaction) {
+        throw new ApiError(404, "Transaction not found!");
+      } else {
+        await transaction.destroy();
+        const responseData = {
+          response: `Transaction ${id} deleted`
+        }
+        res.json(responseData);
+      }
+    } catch (err) {
+      return next(err);
+    }
+  };
 }
 
 module.exports = new BudgetController();
