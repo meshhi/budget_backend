@@ -15,10 +15,21 @@ const postModel = sequelize.define('Post', {
   media:{ type: DataTypes.STRING, allowNull: true, unique: false },
 });
 
+const transactionModel = sequelize.define('Transaction', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  title: { type: DataTypes.STRING, allowNull: false, unique: false },
+  text:{ type: DataTypes.STRING, allowNull: false, unique: false },
+  isIncome:{ type: DataTypes.BOOLEAN, allowNull: true, unique: false },
+});
+
 userModel.hasMany(postModel);
 postModel.belongsTo(userModel);
 
+userModel.hasMany(transactionModel);
+transactionModel.belongsTo(userModel);
+
 module.exports = {
   userModel,
-  postModel
+  postModel,
+  transactionModel
 };
