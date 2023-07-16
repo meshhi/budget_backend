@@ -1,4 +1,7 @@
 require("dotenv").config()
+const { uuid } = require('uuidv4');
+const { WebSocketServer } = require('ws');
+const http = require('http');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -65,6 +68,38 @@ const start = async () => {
 
   console.log('Init successfully');
   app.listen(process.env.PORT || 5000, () => console.log("Server listening on port " + process.env.PORT));
+
+  
+
+
+  // Spinning the http server and the WebSocket server.
+  const server = http.createServer();
+  const wsServer = new WebSocketServer({ server });
+  const wsPort = 8000;
+  server.listen(wsPort, () => {
+    console.log(`WebSocket server is running on port ${wsPort}`);
+  });
+
+  const clients = {};
+  // A new client connection request received
+  wsServer.on('connection', function(wsClient) {
+    // Generate a unique code for every user
+    const userId = uuid();
+    console.log(`Recieved a new connection.`);
+
+    // Store the new connection and handle messages
+    clients[userId] = wsClient;
+    console.log(`${userId} connected.`);
+    const intervalWs = setInterval(() => wsClient.send(new Date().getTime()), 1000);
+  });
+
+  wsServer.on('message', function(wsClient) {
+    /* обработчик сообщений от клиента */
+    console.log('server received message')
+  });
+
+  
+  
 };
 
 start()
