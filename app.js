@@ -31,7 +31,7 @@ const start = async () => {
   const initDb = async () => {
     try {
       await sequelize.authenticate();
-      await sequelize.sync({ force: true });
+      await sequelize.sync({ alter: true });
       console.log('DB connection has been established successfully.');
     } catch (err) {
       console.log('Unable to connect to the database:', err);
@@ -50,7 +50,7 @@ const start = async () => {
       res.send('Data generated!')
     }
   }
-  await generateTestData();
+  // await generateTestData();
 
   app.use(cors());
   app.use(logger('dev'));
