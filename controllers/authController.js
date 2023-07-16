@@ -85,8 +85,9 @@ class AuthController {
       if (!token) {
         throw new ApiError(500, 'No token provided!');
       } else {
+        let tokenData;
         try {
-          const tokenData = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
+          tokenData = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
         } catch(err) {
           throw new ApiError(500, 'badToken');
         }
