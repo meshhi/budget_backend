@@ -8,7 +8,7 @@ class AuthController {
     try {
       let {email, password, role} = req.body;
       if (!role) {
-        role = "Developer"
+        role = "developer"
       }
       if (!email || !password) {
         throw ApiError.internalError("No email or password");
@@ -85,8 +85,11 @@ class AuthController {
       if (!token) {
         throw new ApiError(500, 'No token provided!');
       } else {
-        const tokenData = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
-        console.log(tokenData);
+        try {
+          const tokenData = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
+        } catch(err) {
+          throw new ApiError(500, 'badToken');
+        }
         const user = await userModel.findOne({where: { id: tokenData?.id }});
         if (user && user.email === tokenData.email) {
           req.user = user;
