@@ -94,4 +94,6 @@ router.post("/registration", authController.registration);
  */
 router.post("/login", authController.login);
 
+router.post("/check", authController.checkToken);
+
 module.exports = router;

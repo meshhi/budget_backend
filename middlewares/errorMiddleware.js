@@ -5,6 +5,6 @@ module.exports = (err, req, res, next) => {
   const responseData ={
     response: err.message || err
   };
-
+  console.log(responseData);
   res.json(responseData);
 };

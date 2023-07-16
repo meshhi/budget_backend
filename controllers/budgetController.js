@@ -7,7 +7,6 @@ class BudgetController {
   async getTransactions(req, res, next) {
     try {
       const transactions = await transactionModel.findAll();
-      console.log(transactions)
       res.json(transactions);
     } catch (err) {
       return next(err);

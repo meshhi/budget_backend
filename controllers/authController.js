@@ -6,7 +6,10 @@ const { userModel } = require("../models/models")
 class AuthController {
   async registration(req, res, next) {
     try {
-      const {email, password, role} = req.body;
+      let {email, password, role} = req.body;
+      if (!role) {
+        role = "Developer"
+      }
       if (!email || !password) {
         throw ApiError.internalError("No email or password");
       }
@@ -70,6 +73,26 @@ class AuthController {
         res.json(responseData);
       } else {
         throw ApiError.internalError("Invalid password!");
+      }
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  async checkToken(req, res, next) {
+    try {
+      const {token} = req.body;
+      if (!token) {
+        throw new ApiError(500, 'No token provided!');
+      } else {
+        const tokenData = jsonwebtoken.verify(token, process.env.JWT_SECRET_KEY);
+        console.log(tokenData);
+        const user = await userModel.findOne({where: { id: tokenData?.id }});
+        if (user && user.email === tokenData.email) {
+          req.user = user;
+        } else {
+          throw new ApiError(401, 'No user with that credentials');
+        }
       }
     } catch (err) {
       return next(err);
