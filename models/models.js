@@ -23,14 +23,23 @@ const transactionModel = sequelize.define('Transaction', {
   isIncome:{ type: DataTypes.BOOLEAN, allowNull: true, unique: false },
 });
 
+const categoryModel = sequelize.define('category', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+  title: { type: DataTypes.STRING, allowNull: false, unique: false },
+});
+
 userModel.hasMany(postModel);
 postModel.belongsTo(userModel);
 
 userModel.hasMany(transactionModel);
 transactionModel.belongsTo(userModel);
 
+categoryModel.hasOne(transactionModel);
+transactionModel.belongsTo(categoryModel);
+
 module.exports = {
   userModel,
   postModel,
-  transactionModel
+  transactionModel,
+  categoryModel
 };

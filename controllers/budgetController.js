@@ -1,7 +1,7 @@
 const jsonwebtoken = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const ApiError = require("../utils/ApiError");
-const { userModel, transactionModel } = require("../models/models")
+const { userModel, transactionModel, categoryModel } = require("../models/models")
 
 class BudgetController {
   async getTransactions(req, res, next) {
@@ -9,11 +9,13 @@ class BudgetController {
       const authUser = req.user;
       const transactions = await transactionModel.findAll(
         {
-        where: {UserId: authUser.id},
-        include: {
-          model: userModel,
+          where: {UserId: authUser.id},
+          include: [{
+            model: userModel,
+          }, {
+            model: categoryModel,
+          }]
         }
-      }
       );
 
       res.json(transactions);
@@ -24,10 +26,9 @@ class BudgetController {
 
   async createTransaction(req, res, next) {
     try {
-      const { title, text, summary, isIncome } = req.body;
-      console.log(isIncome)
+      const { title, text, summary, isIncome, categoryId } = req.body;
       const authUser = req.user;
-      const createdTransaction = await transactionModel.create({title: title, text: text, summary: summary, isIncome: isIncome, UserId: authUser.id });
+      const createdTransaction = await transactionModel.create({title: title, text: text, summary: summary, isIncome: isIncome, UserId: authUser.id, categoryId: categoryId });
       const responseData = {
         response: "Transaction created!",
         createdTransaction: createdTransaction
@@ -51,6 +52,19 @@ class BudgetController {
           response: `Transaction ${id} deleted`
         }
         res.json(responseData);
+      }
+    } catch (err) {
+      return next(err);
+    }
+  };
+
+  async getCategories(req, res, next) {
+    try {
+      const categories = await categoryModel.findAll();
+      if (!categories) {
+        throw new ApiError(404, "Categories not found!");
+      } else {
+        res.json(categories);
       }
     } catch (err) {
       return next(err);
