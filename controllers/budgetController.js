@@ -1,5 +1,3 @@
-const jsonwebtoken = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const ApiError = require("../utils/ApiError");
 const { userModel, transactionModel, categoryModel } = require("../models/models")
 
@@ -9,7 +7,7 @@ class BudgetController {
       const authUser = req.user;
       const transactions = await transactionModel.findAll(
         {
-          where: {UserId: authUser.id},
+          where: {user_id: authUser.id},
           include: [{
             model: userModel,
           }, {
@@ -28,7 +26,7 @@ class BudgetController {
     try {
       const { title, text, summary, isIncome, categoryId } = req.body;
       const authUser = req.user;
-      const createdTransaction = await transactionModel.create({title: title, text: text, summary: summary, isIncome: isIncome, UserId: authUser.id, categoryId: categoryId });
+      const createdTransaction = await transactionModel.create({title: title, text: text, summary: summary, is_income: isIncome, user_id: authUser.id, category_id: categoryId });
       const responseData = {
         response: "Transaction created!",
         createdTransaction: createdTransaction
