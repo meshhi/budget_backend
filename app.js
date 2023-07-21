@@ -16,7 +16,7 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Welbex API',
+      title: 'Budget Backend API',
       version: '1.0.0',
     },
   },
